@@ -36,7 +36,7 @@ function Login() {
     // e.preventDefault();
     try {
       const response = await axios.post(`${API_BASE}/admin/signin`, formData);
-      console.log('登入成功:', response.data);
+      // console.log('登入成功:', response.data);
       const { token, expired } = response.data;
       document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
       axios.defaults.headers.common['Authorization'] = token;
