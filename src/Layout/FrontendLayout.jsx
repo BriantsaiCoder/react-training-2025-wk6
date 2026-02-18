@@ -11,22 +11,22 @@ function FrontendLayout() {
           </li>
           <li className='nav-item'>
             <Link className='nav-link' to='/product'>
-              產品頁面
+              產品列表
             </Link>
           </li>
           <li className='nav-item'>
             <Link className='nav-link' to='/cart'>
-              購物車頁面
+              購物車
             </Link>
           </li>
           <li className='nav-item'>
             <Link className='nav-link' to='/checkout'>
-              結帳頁面
+              結帳
             </Link>
           </li>
           <li className='nav-item'>
             <Link className='nav-link' to='/login'>
-              登入頁面
+              登入
             </Link>
           </li>
         </ul>

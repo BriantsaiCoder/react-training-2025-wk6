@@ -1,4 +1,39 @@
-function Login({ formData, handleInputChange, handleSubmit }) {
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+function Login() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${API_BASE}/admin/signin`, formData);
+      const { token, expired } = response.data;
+      document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
+      axios.defaults.headers.common['Authorization'] = token;
+      navigate('/');
+    } catch (error) {
+      console.error('登入失敗:', error.response);
+      alert('登入失敗，請確認帳號密碼是否正確');
+    }
+  };
+
   return (
     <div className='container login'>
       <div className='row justify-content-center'>
