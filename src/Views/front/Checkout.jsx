@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { currency } from '../../Utils/filter';
+import { emailRules, nameRules, telRules, addressRules } from '../../Utils/checkoutValidation';
 import { useForm } from 'react-hook-form';
 import { RotatingLines } from 'react-loader-spinner';
 import * as bootstrap from 'bootstrap';
@@ -281,13 +282,7 @@ function Checkout() {
               className='form-control'
               placeholder='例:user@example.com'
               defaultValue='test@gmail.com'
-              {...register('email', {
-                required: '請輸入 Email',
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: 'Email 格式不正確',
-                },
-              })}
+              {...register('email', emailRules)}
             />
             {errors.email && <p className='text-danger'>{errors.email.message}</p>}
           </div>
@@ -303,10 +298,7 @@ function Checkout() {
               className='form-control'
               placeholder='例:王小明'
               defaultValue='test'
-              {...register('name', {
-                required: '請輸入收件人姓名',
-                minLength: { value: 2, message: '姓名至少 2 個字' },
-              })}
+              {...register('name', nameRules)}
             />
             {errors.name && <p className='text-danger'>{errors.name.message}</p>}
           </div>
@@ -322,14 +314,7 @@ function Checkout() {
               className='form-control'
               placeholder='例:0912345678'
               defaultValue='0912346768'
-              {...register('tel', {
-                required: '請輸入收件人電話',
-                minLength: { value: 8, message: '電話至少 8 碼' },
-                pattern: {
-                  value: /^\d+$/,
-                  message: '電話僅能輸入數字',
-                },
-              })}
+              {...register('tel', telRules)}
             />
             {errors.tel && <p className='text-danger'>{errors.tel.message}</p>}
           </div>
@@ -345,9 +330,7 @@ function Checkout() {
               className='form-control'
               placeholder='例:臺北市信義區信義路五段7號'
               defaultValue='kaohsiung'
-              {...register('address', {
-                required: '請輸入收件人地址',
-              })}
+              {...register('address', addressRules)}
             />
             {errors.address && <p className='text-danger'>{errors.address.message}</p>}
           </div>

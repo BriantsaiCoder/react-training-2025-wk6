@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { usernameRules, passwordRules } from '../../Utils/loginValidation';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
@@ -59,13 +59,7 @@ function Login() {
                 className='form-control'
                 name='username'
                 placeholder='name@example.com'
-                {...register('username', {
-                  required: '請輸入 Email',
-                  pattern: {
-                    value: /^\S+@\S+$/i,
-                    message: 'Email 格式不正確',
-                  },
-                })}
+                {...register('username', usernameRules)}
                 // value={formData.username}
                 // onChange={(e) => handleInputChange(e)}
                 // required
@@ -80,13 +74,7 @@ function Login() {
                 className='form-control'
                 name='password'
                 placeholder='Password'
-                {...register('password', {
-                  required: '請輸入密碼',
-                  minLength: {
-                    value: 6,
-                    message: '密碼長度至少需 6 碼',
-                  },
-                })}
+                {...register('password', passwordRules)}
                 // value={formData.password}
                 // onChange={(e) => handleInputChange(e)}
                 // required
