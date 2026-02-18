@@ -247,7 +247,7 @@ function Checkout() {
                     className='form-control'
                     aria-label='Sizing example input'
                     aria-describedby='inputGroup-sizing-sm'
-                    defaultValue={cartItem.qty}
+                    value={cartItem.qty}
                     onChange={(e) => updateCart(cartItem.id, cartItem.product_id, Number(e.target.value))}
                   />
                   <span className='input-group-text' id='inputGroup-sizing-sm'>
