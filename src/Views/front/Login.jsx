@@ -1,29 +1,42 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 function Login() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+  // const [formData, setFormData] = useState({
+  //   username: '',
+  //   password: '',
+  // });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      username: '',
+      password: '',
+    },
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (formData) => {
+    // e.preventDefault();
     try {
       const response = await axios.post(`${API_BASE}/admin/signin`, formData);
+      console.log('登入成功:', response.data);
       const { token, expired } = response.data;
       document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
       axios.defaults.headers.common['Authorization'] = token;
@@ -39,18 +52,26 @@ function Login() {
       <div className='row justify-content-center'>
         <h1 className='h3 mb-3 font-weight-normal'>請先登入</h1>
         <div className='col-8'>
-          <form id='form' className='form-signin' onSubmit={(e) => handleSubmit(e)}>
+          <form id='form' className='form-signin' onSubmit={handleSubmit(onSubmit)}>
             <div className='form-floating mb-3'>
               <input
                 type='email'
                 className='form-control'
                 name='username'
                 placeholder='name@example.com'
-                value={formData.username}
-                onChange={(e) => handleInputChange(e)}
-                required
+                {...register('username', {
+                  required: '請輸入 Email',
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: 'Email 格式不正確',
+                  },
+                })}
+                // value={formData.username}
+                // onChange={(e) => handleInputChange(e)}
+                // required
                 autoFocus
               />
+              {errors.username && <p className='text-danger'>{errors.username.message}</p>}
               <label htmlFor='username'>Email address</label>
             </div>
             <div className='form-floating'>
@@ -59,10 +80,18 @@ function Login() {
                 className='form-control'
                 name='password'
                 placeholder='Password'
-                value={formData.password}
-                onChange={(e) => handleInputChange(e)}
-                required
+                {...register('password', {
+                  required: '請輸入密碼',
+                  minLength: {
+                    value: 6,
+                    message: '密碼長度至少需 6 碼',
+                  },
+                })}
+                // value={formData.password}
+                // onChange={(e) => handleInputChange(e)}
+                // required
               />
+              {errors.password && <p className='text-danger'>{errors.password.message}</p>}
               <label htmlFor='password'>Password</label>
             </div>
             <button className='btn btn-lg btn-primary w-100 mt-3' type='submit'>
